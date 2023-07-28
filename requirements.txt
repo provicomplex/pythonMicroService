@@ -1,5 +1,5 @@
 fastapi==0.100.0
 gtts==2.3.2
-pydantic==1.8.2
+pydantic==2.1.1
 matplotlib==3.4.3
 uvicorn==0.22.0
