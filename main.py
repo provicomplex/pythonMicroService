@@ -69,11 +69,11 @@ async def recibir_datos(datos: List[Item]):
     plt.ylabel("Monto")
     plt.title("Gráfico de montos por mes")
 
-    # Guardar el gráfico en un archivo
-    plt.savefig("grafico.png")
+    # Guardar el gráfico en un archivo JPEG con alta calidad (calidad 95)
+    plt.savefig("grafico.jpg", format="jpeg", quality=95)
 
     # Cerrar la figura para liberar memoria
     plt.close()
 
     # Devolver la imagen generada como respuesta
-    return FileResponse("grafico.png", media_type="image/png")
+    return FileResponse("grafico.jpg", media_type="image/jpeg")
