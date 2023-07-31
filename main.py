@@ -6,6 +6,8 @@ from fastapi import FastAPI, Body
 from pydantic import BaseModel
 from typing import List, Tuple
 import matplotlib.pyplot as plt
+from multiprocessing import set_start_method
+from multiprocessing import Process, Manager
 
 class ModelName(str, Enum):
     alexnet = "alexnet"
@@ -18,6 +20,7 @@ app = FastAPI()
 class Item(BaseModel):
     mes: str
     monto: float
+
 
 
 @app.get("/")
