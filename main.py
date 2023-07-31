@@ -65,9 +65,9 @@ async def recibir_datos(datos: List[Item]):
 
     # Crear el gráfico de barras
     plt.bar(meses, montos)
-    plt.xlabel("Mes")
-    plt.ylabel("Monto")
-    plt.title("Gráfico de montos por mes")
+    plt.xlabel("Month")
+    plt.ylabel("USD")
+    plt.title("Monthly billing")
 
     # Guardar el gráfico en un archivo JPEG con alta calidad (calidad 95)
     plt.savefig("grafico.jpg", format="jpeg", quality=95)
