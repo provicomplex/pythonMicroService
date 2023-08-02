@@ -1,8 +1,9 @@
 from enum import Enum
 import os
-from fastapi.responses import FileResponse
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import FileResponse, JSONResponse
 from gtts import gTTS
-from fastapi import FastAPI, Body, HTTPException
+from fastapi import FastAPI, Body, HTTPException, Request
 from matplotlib import ticker
 from pydantic import BaseModel
 from typing import List, Tuple
@@ -128,10 +129,28 @@ def recibir_datos(datos: List[Item]):
 #     # Devolver la imagen generada como respuesta
 #     return FileResponse("grafico.jpg", media_type="image/jpeg")
 
+# @app.post("/stringToDate/")
+# async def string_to_date(texto_model: TextoModel):
+#     try:
+#         texto = texto_model.texto
+#         extracted_dates = []
+#         dates = search_dates(texto)
+#         if dates is not None:
+#             for d in dates:
+#                 extracted_dates.append(str(d[1]))
+#         else:
+#             extracted_dates.append('None')
+
+#         print(extracted_dates)
+#         return extracted_dates
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail="Error processing the text: " + str(e))
+
 @app.post("/stringToDate/")
-async def string_to_date(texto_model: TextoModel):
+async def string_to_date(request: Request):
     try:
-        texto = texto_model.texto
+        data = await request.json()
+        texto = data.get("texto", "")
         extracted_dates = []
         dates = search_dates(texto)
         if dates is not None:
@@ -141,6 +160,6 @@ async def string_to_date(texto_model: TextoModel):
             extracted_dates.append('None')
 
         print(extracted_dates)
-        return extracted_dates
+        return JSONResponse(content=jsonable_encoder(extracted_dates))
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error processing the text: " + str(e))
