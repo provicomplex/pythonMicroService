@@ -26,8 +26,8 @@ class Item(BaseModel):
     mes: str
     monto: float
 
-# class TextoModel(BaseModel):
-#     texto: str
+class TextoModel(BaseModel):
+    texto: str
 
 
 @app.get("/")
@@ -111,42 +111,23 @@ def recibir_datos(datos: List[Item]):
     return FileResponse("grafico.jpg", media_type="image/jpeg")
 
 
-# async def recibir_datos(datos: List[Item]):
-#     # Extraer los datos de mes y monto para el gráfico
-#     meses = [item.mes for item in datos]
-#     montos = [item.monto for item in datos]
 
-#     # Crear el gráfico de barras
-#     plt.bar(meses, montos)
-#     plt.xlabel("Month")
-#     plt.ylabel("USD")
-#     plt.title("Monthly billing")
+@app.post("/stringToDate/")
+async def string_to_date(texto_model: TextoModel):
+    try:
+        texto = texto_model.texto
+        extracted_dates = []
+        dates = search_dates(texto,languages=["es","en"])
+        if dates is not None:
+            for d in dates:
+                extracted_dates.append(str(d[1]))
+        else:
+            extracted_dates.append('None')
 
-#     # Guardar el gráfico en un archivo JPEG con alta calidad (calidad 95)
-#     plt.savefig("grafico.jpg", format="jpeg", quality=95)
-
-#     # Cerrar la figura para liberar memoria
-#     plt.close()
-
-#     # Devolver la imagen generada como respuesta
-#     return FileResponse("grafico.jpg", media_type="image/jpeg")
-
-# @app.post("/stringToDate/")
-# async def string_to_date(texto_model: TextoModel):
-#     try:
-#         texto = texto_model.texto
-#         extracted_dates = []
-#         dates = search_dates(texto)
-#         if dates is not None:
-#             for d in dates:
-#                 extracted_dates.append(str(d[1]))
-#         else:
-#             extracted_dates.append('None')
-
-#         print(extracted_dates)
-#         return extracted_dates
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail="Error processing the text: " + str(e))
+        print(extracted_dates)
+        return extracted_dates
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error processing the text: " + str(e))
 
 # @app.post("/stringToDate/")
 # async def string_to_date(request: Request):
@@ -166,23 +147,23 @@ def recibir_datos(datos: List[Item]):
 #     except Exception as e:
 #         raise HTTPException(status_code=500, detail="Error processing the text: " + str(e))
 
-@app.post("/stringToDate/")
-async def string_to_date(request: Request):
-    print("string_to_date method reached!")  # <-- Agregamos esta línea
-    try:
-        data = await request.json()
-        texto = data.get("texto", "")
-        extracted_dates = []
-        dates = search_dates(texto)
-        if dates is not None:
-            for d in dates:
-                extracted_dates.append(d[1])
-        else:
-            extracted_dates.append(None)
+# @app.post("/stringToDate/")
+# async def string_to_date(request: Request):
+#     print("string_to_date method reached!")  # <-- Agregamos esta línea
+#     try:
+#         data = await request.json()
+#         texto = data.get("texto", "")
+#         extracted_dates = []
+#         dates = search_dates(texto)
+#         if dates is not None:
+#             for d in dates:
+#                 extracted_dates.append(d[1])
+#         else:
+#             extracted_dates.append(None)
 
-        print(extracted_dates)
-        return JSONResponse(content=jsonable_encoder(extracted_dates))
-    except Exception as e:
-        error_message = "An unexpected error occurred."
-        print(error_message)
-        raise HTTPException(status_code=500, detail=error_message)
+#         print(extracted_dates)
+#         return JSONResponse(content=jsonable_encoder(extracted_dates))
+#     except Exception as e:
+#         error_message = "An unexpected error occurred."
+#         print(error_message)
+#         raise HTTPException(status_code=500, detail=error_message)
