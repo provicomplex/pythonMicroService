@@ -24,8 +24,8 @@ class Item(BaseModel):
     mes: str
     monto: float
 
-class TextoModel(BaseModel):
-    texto: str
+# class TextoModel(BaseModel):
+#     texto: str
 
 
 @app.get("/")
