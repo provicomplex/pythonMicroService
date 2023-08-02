@@ -168,6 +168,7 @@ def recibir_datos(datos: List[Item]):
 
 @app.post("/stringToDate/")
 async def string_to_date(request: Request):
+    print("string_to_date method reached!")  # <-- Agregamos esta línea
     try:
         data = await request.json()
         texto = data.get("texto", "")
@@ -182,4 +183,6 @@ async def string_to_date(request: Request):
         print(extracted_dates)
         return JSONResponse(content=jsonable_encoder(extracted_dates))
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Error processing the text: " + str(e))
+        error_message = "An unexpected error occurred."
+        print(error_message)
+        raise HTTPException(status_code=500, detail=error_message)
