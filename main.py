@@ -1,3 +1,4 @@
+from ast import parse
 from enum import Enum
 import os
 from fastapi.encoders import jsonable_encoder
@@ -11,6 +12,7 @@ import matplotlib.pyplot as plt
 from multiprocessing import set_start_method
 from multiprocessing import Process, Manager
 from dateparser.search import search_dates
+from dateutil.parser import parse
 
 class ModelName(str, Enum):
     alexnet = "alexnet"
@@ -146,6 +148,24 @@ def recibir_datos(datos: List[Item]):
 #     except Exception as e:
 #         raise HTTPException(status_code=500, detail="Error processing the text: " + str(e))
 
+# @app.post("/stringToDate/")
+# async def string_to_date(request: Request):
+#     try:
+#         data = await request.json()
+#         texto = data.get("texto", "")
+#         extracted_dates = []
+#         dates = search_dates(texto)
+#         if dates is not None:
+#             for d in dates:
+#                 extracted_dates.append(str(d[1]))
+#         else:
+#             extracted_dates.append('None')
+
+#         print(extracted_dates)
+#         return JSONResponse(content=jsonable_encoder(extracted_dates))
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail="Error processing the text: " + str(e))
+
 @app.post("/stringToDate/")
 async def string_to_date(request: Request):
     try:
@@ -155,9 +175,9 @@ async def string_to_date(request: Request):
         dates = search_dates(texto)
         if dates is not None:
             for d in dates:
-                extracted_dates.append(str(d[1]))
+                extracted_dates.append(d[1])
         else:
-            extracted_dates.append('None')
+            extracted_dates.append(None)
 
         print(extracted_dates)
         return JSONResponse(content=jsonable_encoder(extracted_dates))
