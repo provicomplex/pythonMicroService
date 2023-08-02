@@ -46,7 +46,7 @@ async def get_model(model_name: ModelName):
 
 @app.post("/text/")
 async def texToAudio(data: dict = Body(..., embed=True)):
-    # Obtener el texto y el idioma del JSON recibido
+    # Obtener el texto y el idioma del JSON 
     texto_recibido = data.get("texto", "")
     idioma_recibido: str = data.get("idioma", "")
 
