@@ -2,7 +2,7 @@ from enum import Enum
 import os
 from fastapi.responses import FileResponse
 from gtts import gTTS
-from fastapi import FastAPI, Body
+from fastapi import FastAPI, Body, HTTPException
 from matplotlib import ticker
 from pydantic import BaseModel
 from typing import List, Tuple
@@ -130,14 +130,17 @@ def recibir_datos(datos: List[Item]):
 
 @app.post("/stringToDate/")
 async def string_to_date(texto_model: TextoModel):
-    texto = texto_model.texto
-    extracted_dates = []
-    dates = search_dates(texto)
-    if dates is not None:
-        for d in dates:
-            extracted_dates.append(str(d[1]))
-    else:
-        extracted_dates.append('None')
+    try:
+        texto = texto_model.texto
+        extracted_dates = []
+        dates = search_dates(texto)
+        if dates is not None:
+            for d in dates:
+                extracted_dates.append(str(d[1]))
+        else:
+            extracted_dates.append('None')
 
-    print(extracted_dates)
-    return extracted_dates
+        print(extracted_dates)
+        return extracted_dates
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error processing the text: " + str(e))
