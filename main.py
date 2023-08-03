@@ -99,13 +99,16 @@ def recibir_datos(datos: List[Item]):
     plt.gca().yaxis.set_major_formatter(ticker.FuncFormatter(format_y_axis))
 
     # Ajustar el espaciado entre los ticks del eje x (meses)
-    plt.xticks(range(len(meses)), meses, rotation=45, ha="right")
+    plt.xticks(range(len(meses)), meses, rotation=20, ha="right")
 
     # Guardar el gráfico en un archivo JPEG con alta calidad (calidad 95)
     plt.savefig("grafico.jpg", format="jpeg")
 
     # Cerrar la figura para liberar memoria
     plt.close()
+
+    meses = []
+    montos = []
 
     # Devolver la imagen generada como respuesta
     return FileResponse("grafico.jpg", media_type="image/jpeg")
@@ -117,7 +120,7 @@ async def string_to_date(texto_model: TextoModel):
     try:
         texto = texto_model.texto
         extracted_dates = []
-        dates = search_dates(texto,languages=["es","en"])
+        dates = search_dates(texto,languages=["es","en","pt"])
         if dates is not None:
             for d in dates:
                 extracted_dates.append(str(d[1]))
